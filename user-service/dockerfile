@@ -1,0 +1,14 @@
+# Use OpenJDK image as the base image
+FROM openjdk:23
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the JAR file for the Auth/User service
+COPY ./target/peliculasAPIUsers-0.0.1-SNAPSHOT.jar /app/auth-user-service.jar
+
+# Expose the port for the Auth/User service
+EXPOSE 8002
+
+# Run the Auth/User service JAR file
+ENTRYPOINT ["java", "-jar", "auth-user-service.jar"]

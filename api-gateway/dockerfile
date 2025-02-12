@@ -1,0 +1,14 @@
+# Use OpenJDK image as the base image
+FROM openjdk:23
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the JAR file for the API Gateway service 
+COPY ./target/api-gateway-0.0.1-SNAPSHOT.jar /app/api-gateway.jar
+
+# Expose the port for the API Gateway
+EXPOSE 8080
+
+# Run the API Gateway JAR file
+ENTRYPOINT ["java", "-jar", "api-gateway.jar"]

@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-PeliculasApiUsersApplication<peliculasAPIUsers>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "es.uah.peliculasAPIUsers.PeliculasApiUsersApplication",
+      "projectName": "peliculasAPIUsers",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

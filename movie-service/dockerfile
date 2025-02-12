@@ -1,0 +1,14 @@
+# Use OpenJDK image as the base image
+FROM openjdk:23
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the JAR file for the Movie/Actor service
+COPY ./target/peliculasAPI-0.0.1-SNAPSHOT.jar /app/movie-actor-service.jar
+
+# Expose the port that the Movie/Actor service uses
+EXPOSE 8001
+
+# Run the Movie/Actor service JAR file
+ENTRYPOINT ["java", "-jar", "movie-actor-service.jar"]

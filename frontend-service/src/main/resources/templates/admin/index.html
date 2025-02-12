@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineConexión | Panel de Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">CineConexión</a>
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/movies">Peliculas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/actors">Actores</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/search">Busqueda Avanzada</a>
+                </li>
+                <li sec:authorize="isAuthenticated() && hasRole('ROLE_ADMIN')" class="nav-item">
+                    <a class="nav-link" href="/admin">Panel de Admin</a>
+                </li>
+            </ul>
+            <div sec:authorize="isAuthenticated()" class="form-inline my-2 my-lg-0 d-flex gap-4 align-items-center">
+                <div class="text-end">
+                    <strong class="m-0" th:text="${user.name}"></strong>
+                    <p class="m-0 text-light-emphasis" th:text="${user.email}"></p>
+                </div>
+                <a
+                        href="/logout"
+                        class="btn btn-outline-success my-2 my-sm-0"
+                        type="submit"
+                >
+                    Cerrar Sesion
+                </a>
+            </div>
+            <div sec:authorize="!isAuthenticated()" class="form-inline my-2 my-lg-0">
+                <a
+                        href="/login"
+                        class="btn btn-outline-success my-2 my-sm-0"
+                        type="submit"
+                >
+                    Iniciar Sesion
+                </a>
+                <a
+                        href="/register"
+                        class="btn btn-outline-success my-2 my-sm-0"
+                        type="submit"
+                >
+                    Registrate
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Gestion de Usuarios</h2>
+        <a sec:authorize="isAuthenticated() && hasRole('ROLE_ADMIN')" class="btn btn-primary" href="/admin/user/create">Crear Usuario</a>
+    </div>
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Correo Electronico</th>
+            <th>Role</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody id="userTableBody">
+        <tr th:if="${user.id != userObj.id}" th:each="userObj : ${users}">
+            <td th:text="${userObj.id}"></td>
+            <td th:text="${userObj.name}"></td>
+            <td th:text="${userObj.email}"></td>
+            <td>
+                <ul>
+                    <li th:each="role : ${userObj.roles}" th:text="${role.name}"></li>
+                </ul>
+            </td>
+            <td sec:authorize="isAuthenticated() && hasRole('ROLE_ADMIN')">
+                <a th:href="@{/admin/user/view/{id} (id=${userObj.id})}" class="btn btn-primary">Ver</a>
+                <a th:href="@{/admin/user/edit/{id} (id=${userObj.id})}" class="btn btn-warning">Editar</a>
+                <a th:href="@{/admin/user/delete/{id}  (id=${userObj.id})}"
+                   th:text="Eliminar"
+                   onclick="return confirm('¿Estas seguro?')"
+                   class="btn btn-danger"
+                   role="button"
+                   title="Actor."><i class="fas fa-trash" aria-hidden="true"></i
+                ></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <nav th:replace="~{paginator-nav :: paginator}"></nav>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
