@@ -62,9 +62,40 @@ services:
     volumes:
       - ./init-scripts:/docker-entrypoint-initdb.d
 
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    restart: always
+    hostname: gitlab
+    ports:
+      - '8929:8929'
+    networks:
+      - backend
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://localhost:8929'
+    volumes:
+      - gitlab-config:/etc/gitlab
+      - gitlab-logs:/var/log/gitlab
+      - gitlab-data:/var/opt/gitlab
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    restart: always
+    ports:
+      - '9000:9000'
+    networks:
+      - backend
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-data:/data
+
 networks:
   backend:
     driver: bridge
 
 volumes:
   mysql-data:
+  gitlab-config:
+  gitlab-logs:
+  gitlab-data:
+  portainer-data:
